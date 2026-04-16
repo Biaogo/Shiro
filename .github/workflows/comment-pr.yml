@@ -4,7 +4,7 @@ name: Comment on the pull request
 # access to secrets
 on:
   workflow_run:
-    workflows: ["Next.js Bundle Analysis"]
+    workflows: ['Next.js Bundle Analysis']
     types:
       - completed
 
@@ -30,14 +30,14 @@ jobs:
         with:
           workflow: ${{ github.event.workflow_run.workflow_id }}
           name: analysis_comment
-          path: .next/analyze
+          path: apps/web/.next/analyze
 
       - name: Get Comment Body
         id: get-comment-body
         if: success() && steps.pr.outputs.id
         run: |
           echo "body<<EOF" >> $GITHUB_OUTPUT
-          echo "$(cat .next/analyze/__bundle_analysis_comment.txt)" >> $GITHUB_OUTPUT
+          echo "$(cat apps/web/.next/analyze/__bundle_analysis_comment.txt)" >> $GITHUB_OUTPUT
           echo EOF >> $GITHUB_OUTPUT
 
       - name: Find Comment
@@ -46,7 +46,7 @@ jobs:
         id: fc
         with:
           issue-number: ${{ steps.pr.outputs.id }}
-          body-includes: "<!-- __NEXTJS_BUNDLE -->"
+          body-includes: '<!-- __NEXTJS_BUNDLE -->'
 
       - name: Create Comment
         uses: peter-evans/create-or-update-comment@v4
